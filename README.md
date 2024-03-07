@@ -139,14 +139,25 @@ language=fr
 type=friend 
 ```
 A la suite du général Ajouter les postes : 
+```
 [201] 
 host=dynamic 
-username=101 
+username=201 
 type=friend 
-secret=101 
+secret=201
+```
+Pour le poste 202
 
+```
+[202] 
+host=dynamic 
+username=202
+type=friend 
+secret=202
+```
 Une fois fait aller dans le CLI d'Asterisk => `asterisk -rvvvvv`
 Puis `sip reload` et `sip show peers`
 Pour l'instant, les tépéphones sip sont bien paramétrés dans le fichier sip.conf. Il va falloir 
 maintenant, enregistrer ces trois téléphones auprès de l'IPBX Asterisk. 
 
+*** Enregistrement des téléphones ***
