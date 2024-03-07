@@ -61,3 +61,92 @@ Pour sortir de la console tapez la commande `exit`.
 
 Si vous avez modifié le fichier sip.conf, il vous suffira dans la CLI de taper la commande sip 
 reload.
+
+Si vous avez modifié le fichier sip.conf, il vous suffira dans la CLI de taper la commande `sip reload`. 
+Si vous avez modifié le fichier extensions.conf (plan de numérotation), , il vous suffira dans 
+la CLI de taper la commande `dialplan reload`. 
+Pour recharger presque la totalité des configurations d'asterisk il suffit de taper la commander 
+`reload`. 
+
+**Fichier SIP.conf***
+Le fichier d'Asterisk qui permet d'enregistrer les différents téléphones SIP s'appelle sip.conf et il 
+se trouve dans /etc/asterisk/sip.conf. 
+Avant toutes choses vérifiez que vous avez bien sauvegardé (renommé) votre fichier sip.conf en 
+sip.conf.bak ou en sip.conf.old. 
+Puis tapez la commande :
+ : echo "" > /etc/asterisk/sip.conf. 
+ 
+Ce fichier contient plusieurs sections séparées par des crochets. Ouvrez le fichier d'exemples 
+original et donner le nom de la première section.
+Dans notre cas :  `[general]`
+
+La section `[general]` dans la configuration d'Asterisk est une section globale qui définit des paramètres généraux pour le fonctionnement global du système Asterisk. Cette section est souvent utilisée pour définir des paramètres qui affectent le comportement global du serveur Asterisk, tels que les paramètres de journalisation, les paramètres réseau, les paramètres de sécurité, etc.
+
+Voici quelques exemples de ce que vous pourriez trouver dans une section `[general]` dans la configuration d'Asterisk :
+
+Paramètres de journalisation: Vous pouvez spécifier le niveau de détail des journaux système et leur emplacement.
+
+Paramètres réseau: Vous pouvez spécifier les interfaces réseau à utiliser, les ports d'écoute, les protocoles pris en charge, etc.
+
+Paramètres de sécurité: Vous pouvez configurer des options de sécurité telles que le chiffrement des communications, les autorisations d'accès, etc.
+
+Paramètres de performance: Vous pouvez ajuster les paramètres liés aux performances du système, tels que le nombre maximal de connexions simultanées, les tampons de mémoire, etc.
+
+Paramètres de localisation: Vous pouvez spécifier des paramètres de localisation, tels que le fuseau horaire par défaut, les paramètres régionaux, etc.
+
+En résumé, la section `[general]` dans la configuration d'Asterisk sert à définir des paramètres globaux qui affectent le fonctionnement global du système.
+
+Toutes les sections suivantes permettent de définir les téléphones sip. Il y en aura autant que de 
+téléphones sip.
+
+*** Création du fichier Général ***
+Editer dans votre fichier sip.conf les lignes suivantes (le texte précédé d'un poit-virgule 
+correspond aux commentaires, ce texte est donc facultatif) 
+
+Le fichier sip.conf est un élément essentiel dans la configuration d'un serveur Asterisk, qui gère les paramètres liés aux connexions SIP (Session Initiation Protocol). Voici un compte rendu des éléments de la section [general] de ce fichier :
+
+context=tata : Ce paramètre indique le contexte par défaut dans lequel les téléphones SIP définis ultérieurement dans le fichier seront placés. Cela permet de déterminer les règles de composition des numéros et les autorisations associées.
+
+bindport=5060 : Il spécifie le port sur lequel le serveur Asterisk écoutera les requêtes SIP entrantes. Le port par défaut pour le protocole SIP est 5060.
+
+bindaddr=0.0.0.0 : Cette adresse IP spécifie sur quelle interface le serveur va écouter le trafic SIP. La valeur 0.0.0.0 indique que le serveur écoutera sur toutes les interfaces disponibles.
+
+srvlookup=yes : Ce paramètre autorise la résolution des noms DNS des appareils SIP, conformément à la RFC SIP.
+
+disallow=all : Cette directive désactive tous les codecs par défaut.
+
+allow=alaw : Il active le codec G.711 alaw, utilisé principalement aux États-Unis.
+
+allow=gsm : Cela permet d'activer le codec GSM, qui est souvent utilisé pour les appels mobiles.
+
+directmedia=no : Ce paramètre spécifie que le flux RTP (Real-time Transport Protocol), c'est-à-dire le flux vocal, ne passera pas directement entre les deux appareils téléphoniques sans passer par le serveur Asterisk.
+
+language=fr : Il indique la langue par défaut à utiliser pour les sons fournis par Asterisk. Ici, c'est le français.
+
+type=friend : Ce paramètre est utilisé pour identifier les types de connexion, en l'occurrence, pour des appels entrants et sortants. Le type "friend" est utilisé pour identifier à la fois les appels entrants (utilisateur) et sortants (équipement).
+Copier coller la suite : 
+```
+[general] 
+context = tata ; commentaires
+bindport=5060 
+bindaddr=0.0.0.0 
+srvlookup=yes 
+disallow=all 
+allow=alaw 
+allow=gsm 
+directmedia=no 
+language=fr 
+type=friend 
+```
+A la suite du général Ajouter les postes : 
+[201] 
+host=dynamic 
+username=101 
+type=friend 
+secret=101 
+
+Une fois fait aller dans le CLI d'Asterisk => `asterisk -rvvvvv`
+Puis `sip reload` et `sip show peers`
+Pour l'instant, les tépéphones sip sont bien paramétrés dans le fichier sip.conf. Il va falloir 
+maintenant, enregistrer ces trois téléphones auprès de l'IPBX Asterisk. 
+
