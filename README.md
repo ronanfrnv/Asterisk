@@ -161,3 +161,15 @@ Pour l'instant, les tépéphones sip sont bien paramétrés dans le fichier sip.
 maintenant, enregistrer ces trois téléphones auprès de l'IPBX Asterisk. 
 
 *** Enregistrement des téléphones ***
+Sur l'interface Web de l'ip du téléphone :
+
+Enregistrer le téléphone  : 
+
+![image](https://github.com/ronanfrnv/Asterisk/assets/65066876/4a2cdb1b-9c7e-4953-817c-de1d5b26de5c)
+![image](https://github.com/ronanfrnv/Asterisk/assets/65066876/34a1f63b-9b89-4ee9-b10a-60f3d6eeb0a3)
+
+Une fois connecté : 
+![image](https://github.com/ronanfrnv/Asterisk/assets/65066876/ddc235f4-394c-4751-878e-dca3fa2d304f)
+
+
+
