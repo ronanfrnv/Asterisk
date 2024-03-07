@@ -275,6 +275,14 @@ SIP/201: C'est la destination vers laquelle l'appel est dirigé. Dans ce cas, il
 
 Dans notre cas pour l'exo final nous avons fait quelques changements : 
 
+Le contexte pour lequel vous aller développer cette fonctionnalité s’appellera « [technicien] » 
+Le numéro de téléphone x600 doit permettre de faire sonner à tour de rôle chaque téléphone du 
+service de la façon suivante : 
+ Téléphone 1 (101) sonne pendant 20s 
+ Téléphone 2 commence à sonner 10s après le début de téléphone 1 et pendant 20s. 
+ Téléphone 3 commence à sonner 10 seconde après début téléphone 2 et pendant 20s 
+ Le premier téléphone qui décroche est celui qui récupère l'appel. 
+ Le contexte « technicien » doit être accessible pour tous les utilisateurs de l’agence.
 
 sip.conf :
 
@@ -326,5 +334,51 @@ exten => 201,1,Dial(SIP/201,10)
 exten => 202,1,Dial(SIP/202) 
 
 ```
+Voici le modification du fichier extentions.conf
+```
+[general]
+[globals]
+[technicien]
+exten => 101,1,Dial(SIP/101,10)
+exten => 102,1,Dial(SIP/102) 
+exten => 201,1,Dial(SIP/201,10)
+exten => 202,1,Dial(SIP/202) 
+exten => 1600,1,Verbose(2,Dialing techniciens sequentially)
+ same => n,Dial(Local/technicien_1@TimeDelay&Local/technicien_2@TimeDelay&Local/technicien_3@TimeDelay,40)
+ same => n,Hangup()
 
+[LocalSets]
+[TimeDelay]
+exten => technicien_1,1,Verbose(2,Dialing technician 1)
+ same => n,Dial(SIP/101,20)
+ same => n,Hangup()
+exten => technicien_2,1,Verbose(2,Dialing technician 2 with delay)
+ same => n,Wait(10)
+ same => n,Dial(SIP/102,20)
+ same => n,Hangup()
+exten => technicien_3,1,Verbose(2,Dialing technician 3 with delay)
+ same => n,Wait(20)
+ same => n,Dial(SIP/201,20)
+ same => n,Hangup()
 
+```
+
+[general], [globals], [technicien], [LocalSets], [TimeDelay]: Ce sont des sections de configuration pour différents aspects du système.
+
+exten => 101,1,Dial(SIP/101,10): Lorsque l'extension 101 est composée, elle fait un appel vers l'extension SIP 101 avec un délai de 10 secondes.
+
+exten => 102,1,Dial(SIP/102): Lorsque l'extension 102 est composée, elle fait un appel vers l'extension SIP 102.
+
+exten => 201,1,Dial(SIP/201,10): Lorsque l'extension 201 est composée, elle fait un appel vers l'extension SIP 201 avec un délai de 10 secondes.
+
+exten => 202,1,Dial(SIP/202): Lorsque l'extension 202 est composée, elle fait un appel vers l'extension SIP 202.
+
+exten => 1600,1,Verbose(2,Dialing techniciens sequentially): Lorsque l'extension 1600 est composée, elle affiche un message verbeux indiquant que les techniciens sont appelés séquentiellement.
+
+same => n,Dial(Local/technicien_1@TimeDelay&Local/technicien_2@TimeDelay&Local/technicien_3@TimeDelay,40): Il compose les extensions technicien_1, technicien_2 et technicien_3 en utilisant une séquence, en leur appliquant un délai spécifique, puis il les appelle toutes en même temps. Si l'appel n'est pas répondus dans les 40 secondes, il continue au prochain pas.
+
+same => n,Hangup(): Il raccroche l'appel à la fin de la séquence.
+
+Dans la section [TimeDelay], les extensions technicien_1, technicien_2 et technicien_3 sont configurées pour composer séquentiellement les techniciens, chacun avec un délai spécifique avant l'appel.
+
+Ce code semble être con
