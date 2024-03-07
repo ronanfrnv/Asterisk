@@ -171,5 +171,63 @@ Enregistrer le téléphone  :
 Une fois connecté : 
 ![image](https://github.com/ronanfrnv/Asterisk/assets/65066876/ddc235f4-394c-4751-878e-dca3fa2d304f)
 
+Stoppez le service Asterisk en tapant `Core stop now`. 
+Relancer le service Asterisk `/etc/init.d/asterisk start`
+Dans la CLI activez le debug sip en tapant `sip set debug on`
+Voici le détail des trames Wireshark
+![image](https://github.com/ronanfrnv/Asterisk/assets/65066876/f7de3531-a9b0-431b-bbbc-af66203d67a4)
+Voici le détail trame Subscribe 
+![image](https://github.com/ronanfrnv/Asterisk/assets/65066876/6ad7410f-0eb9-40b9-81ca-38bce69066ce)
+Voici le détail trame  Register
+![image](https://github.com/ronanfrnv/Asterisk/assets/65066876/e947c780-a497-4b90-8b86-c76b1d04cf27)
+Voici le détail trame  200OK
+![image](https://github.com/ronanfrnv/Asterisk/assets/65066876/4776cf96-ce93-4f4b-a42e-e2a8b3c1c0e7)
+
+*** Fichier Extensions.conf ***
+
+Ce fichier revêt une importance capitale, étant donné qu'il définit le schéma de numérotation pour Asterisk. À noter : à partir de la version 1.6, il existe une alternative à ce fichier de configuration, à savoir le fichier extension.ael ou le fichier extensions.lua, offrant une syntaxe plus structurée pour mettre en place le schéma de numérotation. Dans notre cas, nous optons pour l'utilisation du fichier extensions.conf. Pour une meilleure clarté, veuillez supprimer les fichiers extensions.ael et extensions.lua. Ensuite, veuillez sauvegarder le fichier extensions.conf original.
+
+Puis sauvegardez le fichier extensions.conf original : 
+cd /etc/asterisk 
+cp extensions.conf extensions.conf.bak 
+echo "" > extensions.conf ; vide le fichier
+
+La constitution du fichier "extensions.conf" se déroule comme suit :
+Le fichier commence par deux sections facultatives :
+
+La section [general], destinée à définir les paramètres qui s'appliqueront à l'ensemble du fichier.
+La section [globals], réservée à la définition des variables globales qui seront utilisées ultérieurement.
+Ensuite, il nous revient de créer les sections suivantes, que nous nommerons dorénavant des "contextes". Un contexte est toujours défini entre crochets. La fin d'un contexte est signalée par le nom du contexte suivant.
+
+Ensuite, il nous revient de constituer les sections ultérieures, que nous désignerons dorénavant sous le nom de "contextes". Chaque nom de contexte sera toujours encadré par des crochets. La fin d'un contexte sera signalée par le nom du contexte suivant.
+
+Exemple :
+```
+[general]
+Paramètres applicables dans l'ensemble du fichier
+[globals]
+Définition des variables globales
+[context1]
+Blabla...
+
+```
+Dans notre cas 
+```
+[general]
+Paramètres applicables dans l'ensemble du fichier
+[globals]
+Définition des variables globales
+[tata] 
+exten => 201,1,Dial(SIP/201) 
+exten => 202,1,Dial(SIP/202) 
+
+```
+Après avoir enregistré le fichier, allez dans la CLI est recharger le dialplan en tapant `dialplan 
+reload`. 
+
+
+
+
+
 
 
