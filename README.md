@@ -240,4 +240,9 @@ La commande `sip show channels` :
 Cette commande permet d'afficher des informations sur les canaux SIP actifs sur le système, y compris les canaux entrants et sortants.
 ![image](https://github.com/ronanfrnv/Asterisk/assets/65066876/5d08e7be-f7b2-4ea2-bda4-24a7ed4247f5)
 
+Lorsqu'il n'y a pas de communications : 
+![image](https://github.com/ronanfrnv/Asterisk/assets/65066876/66c0c656-19c5-4ab9-804e-99b0fb3d159c)
+
+Lorsqu'il y a communications : 
+![image](https://github.com/ronanfrnv/Asterisk/assets/65066876/5b5dc94e-cbaa-4bf2-9d62-87f21da60e74)
 
