@@ -57,3 +57,7 @@ Pour voir la version d'Asterisk, utilisez la commande `asterisk -V`.
 Pour accéder à l'interface de ligne de commande (CLI), utilisez la commande `asterisk –rvvv` depuis le répertoire `/etc/asterisk`.
 
 Si vous rencontrez des plantages et souhaitez obtenir un fichier de trace en sortie, utilisez la commande suivante : `asterisk –vvvvvvvvvc | tee /tmp/debug.log`, et pour afficher le fichier journal, utilisez `tail –F /tmp/debug.log`.
+Pour sortir de la console tapez la commande `exit`.
+
+Si vous avez modifié le fichier sip.conf, il vous suffira dans la CLI de taper la commande sip 
+reload.
