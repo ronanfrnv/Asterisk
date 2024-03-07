@@ -246,3 +246,85 @@ Lorsqu'il n'y a pas de communications :
 Lorsqu'il y a communications : 
 ![image](https://github.com/ronanfrnv/Asterisk/assets/65066876/5b5dc94e-cbaa-4bf2-9d62-87f21da60e74)
 
+*** Configurer le temps de tonaliter ***
+Dans le contexte [tata], vous allez modifier :
+```
+exten => 201,1,Dial(SIP/201) 
+```
+En : 
+```
+exten => 201,1,Dial(SIP/201,5) 
+```
+Puis par 10
+
+```
+exten => 201,1,Dial(SIP/201,10) 
+```
+Voici une explication détaillée de cette commande :
+
+exten: C'est un mot-clé qui indique que cette ligne de configuration est associée à une extension spécifique dans le plan de numérotation.
+
+201: C'est le numéro d'extension auquel cette ligne de configuration est associée. Dans ce cas, c'est l'extension 201. Lorsqu'un appel est dirigé vers cette extension, cette ligne de configuration sera exécutée.
+
+1: C'est la priorité de l'action. Dans ce cas, la priorité est 1. Si plusieurs actions sont définies pour la même extension, elles seront exécutées dans l'ordre de priorité.
+
+Dial(SIP/201,5): C'est l'action à effectuer lorsque cette extension est appelée. Cette action est un appel à la fonction Dial() d'Asterisk, qui est utilisée pour composer un numéro ou appeler un autre appareil. Les paramètres de cette fonction sont les suivants :
+
+SIP/201: C'est la destination vers laquelle l'appel est dirigé. Dans ce cas, il indique qu'Asterisk doit composer le canal SIP associé à l'extension 201.
+5: C'est la durée maximale de la tentative d'appel, en secondes. Dans ce cas, si l'appel n'est pas répondu après 5 secondes, Asterisk arrêtera la tentative d'appel.
+
+Dans notre cas pour l'exo final nous avons fait quelques changements : 
+
+
+sip.conf :
+
+```
+[general] 
+context = techniciens ; commentaires
+bindport=5060 
+bindaddr=0.0.0.0 
+srvlookup=yes 
+disallow=all 
+allow=alaw 
+allow=gsm 
+directmedia=no 
+language=fr 
+type=friend 
+[101] 
+host=dynamic 
+username=101 
+type=friend 
+secret=789
+
+[102] 
+host=dynamic 
+username=102
+type=friend 
+secret=789
+[201] 
+host=dynamic 
+username=201 
+type=friend 
+secret=789
+
+[202] 
+host=dynamic 
+username=202
+type=friend 
+secret=789
+
+```
+
+Et extentions.conf : 
+```
+[general]
+[globals]
+[techniciens] 
+exten => 101,1,Dial(SIP/101,10)
+exten => 102,1,Dial(SIP/102) 
+exten => 201,1,Dial(SIP/201,10)
+exten => 202,1,Dial(SIP/202) 
+
+```
+
+
