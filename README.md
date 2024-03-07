@@ -225,9 +225,19 @@ exten => 202,1,Dial(SIP/202)
 Après avoir enregistré le fichier, allez dans la CLI est recharger le dialplan en tapant `dialplan 
 reload`. 
 
+Si on change les contexts par titi alors : 
+![image](https://github.com/ronanfrnv/Asterisk/assets/65066876/2d4005f3-07e9-4ba0-a0c7-e61ee7407693)
+La communication ne se fait pas voir messages d'erreur ci dessus
 
+La commande pour afficher l'ensemble des téléhpones connectés `sip show peers`
+![image](https://github.com/ronanfrnv/Asterisk/assets/65066876/344b9067-8717-4764-a9bc-2ba7723d54b2)
 
+La commande pour afficher la config d'un téléhpone connecté `sip show peer 202`
 
+![image](https://github.com/ronanfrnv/Asterisk/assets/65066876/ef865ba5-18bc-4d5d-bf03-1ff0e9977699)
 
+La commande `sip show channels` :
+Cette commande permet d'afficher des informations sur les canaux SIP actifs sur le système, y compris les canaux entrants et sortants.
+![image](https://github.com/ronanfrnv/Asterisk/assets/65066876/5d08e7be-f7b2-4ea2-bda4-24a7ed4247f5)
 
 
