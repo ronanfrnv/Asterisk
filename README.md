@@ -379,6 +379,59 @@ same => n,Dial(Local/technicien_1@TimeDelay&Local/technicien_2@TimeDelay&Local/t
 
 same => n,Hangup(): Il raccroche l'appel à la fin de la séquence.
 
+
+
 Dans la section [TimeDelay], les extensions technicien_1, technicien_2 et technicien_3 sont configurées pour composer séquentiellement les techniciens, chacun avec un délai spécifique avant l'appel.
 
+
+
+```
+Directeur=SIP/101
+Secretaire=SIP/102
+DeptRT=SIP/201
+DeptInfo=SIP/202
+
+[interne]
+exten => _XXX,1,Set(temp=${EXTEN})
+	same => n,GotoIfTime(9:00-14:00,mon-fri,*,*?time,s,1:)
+	same=>n,Hangup()
+	
+[time]
+exten => s,1,Dial(SIP/${temp},5)
+```
+Voici l'explication : 
+
+Directeur=SIP/101 : Cela assigne l'extension "Directeur" au numéro SIP 101.
+
+Secretaire=SIP/102 : Cela assigne l'extension "Secretaire" au numéro SIP 102.
+
+DeptRT=SIP/201 : Cela assigne l'extension "DeptRT" au numéro SIP 201.
+
+DeptInfo=SIP/202 : Cela assigne l'extension "DeptInfo" au numéro SIP 202.
+
+[interne] : C'est une autre section définissant les extensions pour le groupe "interne".
+
+exten => _XXX,1,Set(temp=${EXTEN}) : Cette ligne définit une extension pour les numéros composés de trois chiffres (XXX). Elle stocke le numéro composé dans la variable temporaire "temp".
+
+same => n,GotoIfTime(9:00-14:00,mon-fri,*,*?time,s,1:) : Cette ligne vérifie si l'appel est fait entre 9h et 14h du lundi au vendredi. Si c'est le cas, elle passe à l'étiquette "time" dans la priorité 1. Sinon, elle passe à la prochaine priorité.
+
+same => n,Hangup() : Cette ligne raccroche l'appel si l'heure ou le jour n'est pas dans la plage spécifiée.
+
+[time] : C'est une section qui définit les extensions pour le traitement des appels pendant certaines plages horaires.
+
+exten => s,1,Dial(SIP/${temp},5) : Cette ligne compose l'extension "s" et appelle le numéro SIP stocké dans la variable temporaire "temp" pendant une durée de 5 secondes.
+
+## Pour lire des fichiers audio voici un exemple
+[interne]
+exten => _XXX,1,Set(temp=${EXTEN})
+	same => n,GotoIfTime(9:00-16:00,mon-fri,*,*?time,s,1:)
+	same=>n,Hangup()
+	
+[time]
+
+exten => s,1,Playback(/var/lib/asterisk/sounds/fr/department-administrator) 
+
+ou 
+
+exten => 101,1,Playback(demo-congrat)
 
