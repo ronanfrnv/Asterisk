@@ -421,6 +421,14 @@ same => n,Hangup() : Cette ligne raccroche l'appel si l'heure ou le jour n'est p
 
 exten => s,1,Dial(SIP/${temp},5) : Cette ligne compose l'extension "s" et appelle le numéro SIP stocké dans la variable temporaire "temp" pendant une durée de 5 secondes.
 
+Comment faire en sorte que ce soit les fichiers sons Français qui soient joués par défaut en 
+modifiant le fichier sip.conf ? 
+SIP.CONF 
+…….. 
+[general] 
+….. 
+Language=fr 
+
 ## Pour lire des fichiers audio voici un exemple
 [interne]
 exten => _XXX,1,Set(temp=${EXTEN})
@@ -428,10 +436,71 @@ exten => _XXX,1,Set(temp=${EXTEN})
 	same=>n,Hangup()
 	
 [time]
+exten => s,1,Set(CHANNEL(language)=fr)
+exten => s,1,Playback(/var/lib/asterisk/sounds/fr/demo-congrats)  ou exten => s,1,Playback(demo-congrats)
 
-exten => s,1,Playback(/var/lib/asterisk/sounds/fr/department-administrator) 
+Asterisk est-il capable de traduire les fichiers ?? Non cependant si le ficher n'existe pas dans FR il ira chercher dans le fichier par défaut défini dans sip.conf(Language=fr)
+les sons sont stockés dans /var/lib/asterisks/sounds/....
 
-ou 
 
-exten => 101,1,Playback(demo-congrat)
+Pour demander un mot de passe pour autoriser l'appel :
 
+exten => 555,1,Authenticate(32657) 
+ 	same => n,Goto (enregistrement,s,1) 
+
+Pour faire enregistrer un message vocal puis l'écouter après avoir appuyé sur # :
+
+[time] 
+exten => s,1,Set(CHANNEL(language)=fr) 
+	same => n,Playback(recorded) 
+	same => n,Record(custom/fichier-%d.alaw) 
+	same => n,Playback(beep) 
+	same => n,Verbose(${RECORDED_FILE})
+	same => n,Playback(${RECORDED_FILE}) 
+
+
+Pour tomber directement sur une musique d'attente :
+
+exten => 888,1,Answer() 
+	same => 888,2,MusicOnHold(default)	
+
+
+Mise en place d'un serveur vocal intéractif :
+
+
+[interne]
+Cette ligne définit un contexte appelé "interne". Les contextes sont des sections de configuration dans Asterisk qui regroupent des règles pour le traitement des appels.
+
+exten => 555,1,Goto(SVI,s,1)
+Cette ligne indique à Asterisk quoi faire lorsqu'un appel est reçu sur le numéro 555. Elle dit à Asterisk de sauter à la première priorité (1) du contexte "SVI" (Service à Valeur Ajoutée) et de l'extension "s" (qui est souvent utilisée comme point d'entrée par défaut dans un contexte) lorsque le numéro 555 est composé.
+
+[SVI]
+Cette ligne définit un autre contexte appelé "SVI".
+
+exten => s,1,BackGround(recorded) 
+same => n,waitexten(5)
+Ces lignes spécifient ce qui se passe lorsque l'appel est dirigé vers le contexte "SVI" avec l'extension "s". La première priorité (1) joue un fichier audio préenregistré appelé "recorded" à l'appelant. Ensuite, la fonction waitexten(5) permet à l'appelant de saisir une touche pendant 5 secondes.
+
+exten => 1,1,Dial(SIP/102)
+Cette ligne spécifie ce qui se passe lorsque l'appelant appuie sur la touche "1" pendant la lecture du fichier audio ou dans les 5 secondes suivantes. Dans ce cas, l'appel est dirigé vers l'extension SIP "102".
+
+exten => 2,1,Dial(SIP/201)
+Cette ligne spécifie ce qui se passe lorsque l'appelant appuie sur la touche "2" pendant la lecture du fichier audio ou dans les 5 secondes suivantes. Dans ce cas, l'appel est dirigé vers l'extension SIP "201".
+
+Soit le code suivant : 
+
+```
+[interne]
+
+exten => 555,1,Goto(SVI,s,1)
+
+	
+[SVI]
+exten => s,1,BackGround(recorded) 
+	same => n,waitexten(5)
+	
+exten => 1,1,Dial(SIP/102)
+
+exten => 2,1,Dial(SIP/201)
+
+```
