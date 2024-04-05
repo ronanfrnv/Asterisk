@@ -327,7 +327,7 @@ Et extentions.conf :
 ```
 [general]
 [globals]
-[techniciens] 
+[technicien] 
 exten => 101,1,Dial(SIP/101,10)
 exten => 102,1,Dial(SIP/102) 
 exten => 201,1,Dial(SIP/201,10)
@@ -349,14 +349,14 @@ exten => 1600,1,Verbose(2,Dialing techniciens sequentially)
 
 [LocalSets]
 [TimeDelay]
-exten => technicien_1,1,Verbose(2,Dialing technician 1)
+exten => technicien_1,1,Verbose(2,Dialing technicien 1)
  same => n,Dial(SIP/101,20)
  same => n,Hangup()
-exten => technicien_2,1,Verbose(2,Dialing technician 2 with delay)
+exten => technicien_2,1,Verbose(2,Dialing technicien 2 with delay)
  same => n,Wait(10)
  same => n,Dial(SIP/102,20)
  same => n,Hangup()
-exten => technicien_3,1,Verbose(2,Dialing technician 3 with delay)
+exten => technicien_3,1,Verbose(2,Dialing technicien 3 with delay)
  same => n,Wait(20)
  same => n,Dial(SIP/201,20)
  same => n,Hangup()
@@ -381,4 +381,4 @@ same => n,Hangup(): Il raccroche l'appel à la fin de la séquence.
 
 Dans la section [TimeDelay], les extensions technicien_1, technicien_2 et technicien_3 sont configurées pour composer séquentiellement les techniciens, chacun avec un délai spécifique avant l'appel.
 
-Ce code semble être con
+
